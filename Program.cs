@@ -18,7 +18,7 @@ namespace AgendaTelefones
                 TipoContato.Celular,
                 "test@example.com",
                 endereco,
-                DateTime.Now,
+                new DateTime(2000, 10, 10),
                 "novo contato"
                 );
 
