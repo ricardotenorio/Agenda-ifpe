@@ -1,4 +1,6 @@
 ﻿using System;
+using AgendaTelefones.Struct;
+using AgendaTelefones.Enums;
 
 namespace AgendaTelefones
 {
@@ -6,7 +8,21 @@ namespace AgendaTelefones
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var telefone = new Telefone("33", "39467890");
+            var endereco = new Endereco("rua", "bairro", "cidade", "estado");
+            
+            var contato = new Contato(
+                "t",
+                "y",
+                telefone,
+                TipoContato.Celular,
+                "test@example.com",
+                endereco,
+                DateTime.Now,
+                "novo contato"
+                );
+
+            Console.WriteLine(contato);
         }
     }
 }

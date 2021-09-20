@@ -1,4 +1,4 @@
-namespace AgendaTelefones.struct
+namespace AgendaTelefones.Struct
 {
     public struct Telefone
     {
@@ -11,9 +11,7 @@ namespace AgendaTelefones.struct
         public string DDD { get; init; }
         public string Numero { get; init; }
 
-        public override string ToString() 
-        {
-            return $"({DDD}) {Numero}";
-        }
+        public override string ToString() => $"({DDD}) {Numero}";
+        
     }
 }

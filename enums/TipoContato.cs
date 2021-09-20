@@ -1,4 +1,4 @@
-namespace AgendaTelefones.enums
+namespace AgendaTelefones.Enums
 {
     public enum TipoContato
     {

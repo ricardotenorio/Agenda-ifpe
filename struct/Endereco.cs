@@ -1,4 +1,4 @@
-namespace AgendaTelefones.struct
+namespace AgendaTelefones.Struct
 {
     public struct Endereco
     {
@@ -14,5 +14,17 @@ namespace AgendaTelefones.struct
         public string Bairro { get; init; }
         public string Cidade { get; init; }
         public string Estado { get; init; }
+
+        public override string ToString() 
+        {
+            string endereco = "\n";
+            
+            endereco += $"\trua: {Rua}\n";
+            endereco += $"\tbairro: {Bairro}\n";
+            endereco += $"\tcidade: {Cidade}\n";
+            endereco += $"\testado: {Estado}";
+
+            return endereco;
+        }
     }
 }
