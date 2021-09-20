@@ -15,7 +15,49 @@ namespace AgendaTelefones
 
         static void Main(string[] args)
         {
-            Console.WriteLine(Teste());
+            var entrada = "";
+            var opcoes = "";
+            opcoes += "1 - Listar contatos\n";
+            opcoes += "2 - Adcionar contato\n";
+            opcoes += "3 - Remover contato\n";
+            opcoes += "4 - Buscar por nome\n";
+            opcoes += "5 - Buscar por nome completo\n";
+            opcoes += "6 - Buscar por tipo\n";
+            opcoes += "7 - Buscar por cidade\n";
+            opcoes += "0 - Sair";
+           
+            do
+            {
+                entrada = PegarEntradaUsuario(opcoes);
+
+                switch (entrada)
+                {
+                    case "1":
+                        ImprimirContatos(contatos);
+                        break;
+                    case "2":
+                        InserirContato();
+                        break;
+                    case "3":
+                        RemoverContato();
+                        break;
+                    case "4":
+                        BuscarNome();
+                        break;
+                    case "5":
+                        BuscarNomeCompleto();
+                        break;
+                    case "6":
+                        BuscarTipo();
+                        break;
+                    case "7":
+                        BuscarCidade();
+                        break;
+                    default:
+                        Console.WriteLine("Entrada Inválida!");
+                        break;
+                }    
+            } while (entrada != "0");
         }
 
         static Contato Teste() 
@@ -97,6 +139,46 @@ namespace AgendaTelefones
             proximaInsercao--;
         }
 
+        static void BuscarNome()
+        {
+            var nome = PegarEntradaUsuario("Digite o nome:");
+
+            Contato[] contatosFiltrados = FiltrarPorNome(nome);
+
+            ImprimirContatos(contatosFiltrados);
+        }
+
+        static void BuscarNomeCompleto()
+        {
+            var nome = PegarEntradaUsuario("Digite o nome:");
+            var sobrenome = PegarEntradaUsuario("Digite o sobrenome:");
+
+            Contato[] contatosFiltrados = FiltrarPorSobrenome(sobrenome, FiltrarPorNome(nome));
+
+            ImprimirContatos(contatosFiltrados);
+        }
+
+        static void BuscarCidade()
+        {
+            var cidade = PegarEntradaUsuario("Digite o cidade:");
+
+            Contato[] contatosFiltrados = FiltrarPorCidade(cidade);
+
+            ImprimirContatos(contatosFiltrados);
+        }
+
+        static void BuscarTipo()
+        {
+            string opcoesContato = "0 - celular\n1 - trabalho\n2 - casa\n3 - principal\n";
+            opcoesContato += "4 - pager\n5 - fax trabalho\n6 - fax casa\n7 - outro";
+
+            TipoContato tipo = (TipoContato) int.Parse(PegarEntradaUsuario(opcoesContato));
+
+            Contato[] contatosFiltrados = FiltrarPorTipo(tipo);
+
+            ImprimirContatos(contatosFiltrados);
+        }
+
         static Contato[] FiltrarPorNome(string nome)
         {
             return contatos
@@ -108,6 +190,20 @@ namespace AgendaTelefones
         {
             return contatosLista
                 .Where(contato => contato.Sobrenome.Equals(sobrenome))
+                .ToArray();
+        }
+
+        static Contato[] FiltrarPorCidade(string cidade)
+        {
+            return contatos
+                .Where(contato => contato.PegarCidade().Equals(cidade))
+                .ToArray();
+        }
+
+        static Contato[] FiltrarPorTipo(TipoContato tipoContato)
+        {
+            return contatos
+                .Where(contato => contato.TipoContato == tipoContato)
                 .ToArray();
         }
 
