@@ -42,5 +42,10 @@ namespace AgendaTelefones.Struct
 
             return contato;
         }
+
+        public string PegarCidade()
+        {
+            return Endereco.Cidade;
+        }
     }
 }
