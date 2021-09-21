@@ -18,7 +18,7 @@ namespace AgendaTelefones
             var entrada = "";
             var opcoes = "";
             opcoes += "1 - Listar contatos\n";
-            opcoes += "2 - Adcionar contato\n";
+            opcoes += "2 - Adicionar contato\n";
             opcoes += "3 - Remover contato\n";
             opcoes += "4 - Buscar por nome\n";
             opcoes += "5 - Buscar por nome completo\n";
@@ -60,25 +60,6 @@ namespace AgendaTelefones
             } while (entrada != "0");
         }
 
-        static Contato Teste() 
-        {
-            var telefone = new Telefone("33", "39467890");
-            var endereco = new Endereco("rua", "bairro", "cidade", "estado");
-            
-            var contato = new Contato(
-                "t",
-                "y",
-                telefone,
-                TipoContato.Celular,
-                "test@example.com",
-                endereco,
-                DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                "novo contato"
-                );
-            
-            return contato;
-        }
-
         static void InserirContato()
         {
             if (proximaInsercao == 100)
@@ -91,6 +72,13 @@ namespace AgendaTelefones
             opcoesContato += "4 - pager\n5 - fax trabalho\n6 - fax casa\n7 - outro";
 
             var nome = PegarEntradaUsuario("Digite o nome:");
+
+            if (String.IsNullOrEmpty(nome)) 
+            {
+                Console.WriteLine("O nome não pode estar vazio");
+                return;
+            }
+
             var sobrenome = PegarEntradaUsuario("Digite o sobrenome:");
             var email = PegarEntradaUsuario("Digite o email:");
             
@@ -130,12 +118,19 @@ namespace AgendaTelefones
 
             var indice = int.Parse(PegarEntradaUsuario("Digite o índice do contato para remover"));
 
-            if (indice > proximaInsercao) {
+            if (indice > proximaInsercao || indice < 0) {
                 Console.WriteLine("Entrada inválida");
                 return;
             }
 
-            contatos = contatos.Where((contato, i) => i != indice).ToArray();
+
+            for (int i = indice; i < contatos.Length - 1; i++)
+            {
+                contatos[i] = contatos[i + 1];
+            }
+
+            contatos[contatos.Length - 1] = new Contato();
+            
             proximaInsercao--;
         }
 
@@ -182,21 +177,21 @@ namespace AgendaTelefones
         static Contato[] FiltrarPorNome(string nome)
         {
             return contatos
-                .Where(contato => contato.Nome.Equals(nome))
+                .Where(contato => nome.Equals(contato.Nome))
                 .ToArray();
         }
 
         static Contato[] FiltrarPorSobrenome(string sobrenome, Contato[] contatosLista)
         {
             return contatosLista
-                .Where(contato => contato.Sobrenome.Equals(sobrenome))
+                .Where(contato => sobrenome.Equals(contato.Sobrenome))
                 .ToArray();
         }
 
         static Contato[] FiltrarPorCidade(string cidade)
         {
             return contatos
-                .Where(contato => contato.PegarCidade().Equals(cidade))
+                .Where(contato => cidade.Equals(contato.PegarCidade()))
                 .ToArray();
         }
 
@@ -223,9 +218,50 @@ namespace AgendaTelefones
 
             for (int i = 0; i < contatosLista.Length; i++)
             {
+                if (String.IsNullOrEmpty(contatosLista[i].Nome))
+                {
+                    break;
+                }
+                int diasAteAniversario = CalcularDiasParaAniversario(contatosLista[i].DataNascimento);
+                
                 Console.WriteLine($"{i} - {contatosLista[i]}");
+
+                if (diasAteAniversario > 0) {
+                    Console.WriteLine($"Faltam {diasAteAniversario} dia(s) para o aniversário");
+                }
+
                 Console.WriteLine("---------------------");
             }
+        }
+
+        static int CalcularDiasParaAniversario(DateTime nascimento)
+        {
+            int faltam = 0;
+            
+            DateTime hoje = DateTime.Today;
+
+            if (CorrigirBissexto(hoje, nascimento)) {
+                faltam++;
+            }
+            
+            hoje = hoje.AddYears(-hoje.Year + 1);
+            nascimento = nascimento.AddYears(-nascimento.Year + 1);
+
+            faltam += nascimento.Subtract(hoje).Days;
+
+            return faltam;
+        }
+
+        static bool CorrigirBissexto(DateTime hoje, DateTime nascimento)
+        {
+            bool ehBissexto = false;
+            bool limite = false;
+
+            ehBissexto = DateTime.IsLeapYear(hoje.Year);
+            limite = hoje.Month < 3 && hoje.Day <= 28
+                && nascimento.Month > 2;
+
+            return ehBissexto && limite;
         }
 
     }

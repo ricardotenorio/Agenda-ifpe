@@ -35,10 +35,7 @@ namespace AgendaTelefones.Struct
             contato += $"sobrenome: {Sobrenome}\n";
             contato += $"email: {Email}\n";
             contato += $"telefone: {Telefone}\n";
-            contato += $"endereço: {Endereco}\n";
-            contato += $"data de nascimento: {DataNascimento.ToString("dd/MM/yyyy")}\n";
             contato += $"tipo: {TipoContato}\n";
-            contato += $"observações: {Observacoes}";
 
             return contato;
         }
